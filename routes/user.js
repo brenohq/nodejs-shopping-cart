@@ -13,10 +13,10 @@ router.post('/removeUser', function(req, res, next) {
   User.findOneAndRemove({email: req.user.email}, function(err, success) {
     if(err) {
       console.log(err.message);
-      req.flash('error', 'Falha ao remover usuário!');
+      req.flash('error', 'Failed to remove user!');
     }
     if(success) {
-      req.flash('success', 'Usuário removido com sucesso!');
+      req.flash('success', 'User successfully removed!');
       res.redirect('/');
     }
   });
@@ -25,22 +25,9 @@ router.post('/removeUser', function(req, res, next) {
 router.use(csrfProtection);
 
 router.get('/profile', isLoggedIn, function(req, res, next) {
-  Order.find({
+  res.render('user/profile', {
+    csrfToken: req.csrfToken(),
     user: req.user
-  }, function(err, orders) {
-    if (err) {
-      return res.write('Error!');
-    }
-    var cart;
-    orders.forEach(function(order) {
-      cart = new Cart(order.cart);
-      order.items = cart.generateArray();
-    });
-    res.render('user/profile', {
-      csrfToken: req.csrfToken(),
-      orders: orders,
-      user: req.user
-    });
   });
 });
 
@@ -52,20 +39,17 @@ router.post('/profile', function(req, res, next) {
     }, function(err, doc) {
 
       if (err) {
-        req.flash('error', 'falhou')
+        req.flash('error', 'failed')
         console.log(err);
       }
 
       doc.email = req.body.email;
-      doc.name = req.body.name;
-      doc.state = req.body.state;
-      doc.city = req.body.city;
-      
+
       doc.save();
 
     });
   } else {
-    console.log("email inválido");
+    console.log("Invalid email");
   }
 
   if (req.session.oldUrl) {
@@ -78,6 +62,25 @@ router.post('/profile', function(req, res, next) {
 
   res.end();
 
+});
+
+router.get('/orders', isLoggedIn, function(req, res, next) {
+    Order.find({
+        user: req.user
+    }, function(err, orders) {
+        if (err) {
+            return res.write('Error!');
+        }
+        var cart;
+        orders.forEach(function(order) {
+            cart = new Cart(order.cart);
+            order.items = cart.generateArray();
+        });
+        res.render('user/orders', {
+            csrfToken: req.csrfToken(),
+            orders: orders,
+        });
+    });
 });
 
 router.get('/logout', isLoggedIn, function(req, res, next) {

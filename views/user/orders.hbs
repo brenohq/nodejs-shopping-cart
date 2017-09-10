@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h1>Orders</h1>
+        <br>
+
+        {{# each orders }}
+            <div class="panel panel-default">
+
+                <div class="panel-body">
+                    <h3>My Shopping</h3>
+                    <hr>
+                    <ul class="list-group">
+                        {{# each this.items }}
+                            <li class="list-group-item">
+                                <span class="badge">{{ this.price }}</span> {{ this.item.title }} | {{ this.qty }} Unit(s)
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
+
+                <div class="panel-footer">
+                    <strong>Total Amount: ${{ this.cart.totalPrice }}</strong>
+                </div>
+
+            </div>
+        {{/each}}
+    </div>
+</div>

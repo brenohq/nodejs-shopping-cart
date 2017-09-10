@@ -3,4 +3,4 @@ node_js:
   - 'v7.2.1'
 services: mongodb
 env:
-  - MONGO_DB_URI=mongodb://root:root@ds137220.mlab.com:37220/shoppingcart-db
+  - MONGODB_URI=mongodb://root:root@ds137220.mlab.com:37220/shoppingcart-db

@@ -1,4 +1,4 @@
-const dbURI = process.env.MONGO_DB_URI;
+const dbURI = process.env.MONGODB_URI;
 const should = require('chai').should();
 const mongoose = require('mongoose');
 
@@ -10,7 +10,7 @@ describe("User test suite", () => {
     mongoose.Promise = global.Promise;
 
     if (mongoose.connection.db) return done();
-    mongoose.connect(dbURI, done);
+    mongoose.connect(dbURI, { useMongoClient: true }, done);
   });
 
   it('should encrypt the password.', () => {

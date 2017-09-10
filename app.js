@@ -17,7 +17,8 @@ var userRoutes = require('./routes/user');
 
 var app = express();
 
-mongoose.connect(process.env.MONGO_DB_URI);
+console.log(process.env)
+mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
 require('./config/passport');
 
 // view engine setup
